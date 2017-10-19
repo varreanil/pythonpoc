@@ -1,0 +1,29 @@
+{
+  "page_index": 0,
+  "code": 200,
+  "accounts": [
+    {
+      "account_id": 415343,
+      "vertical": "apps",
+      "last_sales_date": "2017-10-14",
+      "account_status": "OK",
+      "first_sales_date": "2016-02-08",
+      "publisher_name": "Wellness & Prevention, Inc. - 85055414",
+      "account_name": "Apple",
+      "market": "ios"
+    },
+    {
+      "account_id": 415344,
+      "vertical": "apps",
+      "last_sales_date": "2017-10-14",
+      "account_status": "OK",
+      "first_sales_date": "2014-01-21",
+      "publisher_name": "Johnson & Johnson Health & Wellness Solutions Inc.",
+      "account_name": "Johnson & Johnson Health & Wellness Solutions Inc.",
+      "market": "google-play"
+    }
+  ],
+  "prev_page": null,
+  "page_num": 1,
+  "next_page": null
+}
