@@ -1,4 +1,5 @@
 import requests
+import json
 from requests import ConnectionError
 
 
@@ -19,7 +20,7 @@ class AppAnnie:
             raise ValueError(
                 'Response to API call is not OK. HTTP Response received from server : {} '.format(response.status_code))
 
-        return response.json()
+        return json.loads(response.text)
 
     def downloads_by_product(self, accountid, productid, dt):
         return self._api_call("https://api.appannie.com/v1.2/accounts/{aid}/products/{pid}/sales"

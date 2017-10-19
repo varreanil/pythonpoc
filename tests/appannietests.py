@@ -1,5 +1,6 @@
 import unittest
 import json
+import os
 from unittest.mock import patch
 from apiutils import appannie
 
@@ -14,61 +15,64 @@ class TestAppAnnie(unittest.TestCase):
         self.account_url = "https://api.appannie.com/v1.2/accounts"
         self.product_url = "https://api.appannie.com/v1.2/accounts/415343/products"
 
-        afile = open("accounts.json")
-        pfile = open("products.json")
-        dfile = open("downloads.json")
+        dir = os.path.dirname(__file__)
+        with open(os.path.join(dir, 'accounts.json')) as afile:
+            self.accounts_json_resp = afile.read()
 
-        self.accounts_json_resp = afile.read()
-        self.products_json_resp = pfile.read()
-        self.download_json_resp = dfile.read()
+        with open(os.path.join(dir, 'products.json')) as pfile:
+            self.products_json_resp = pfile.read()
 
-        afile.closed
-        pfile.closed
-        dfile.closed
+        with open(os.path.join(dir, 'downloads.json')) as dfile:
+            self.download_json_resp = dfile.read()
 
+
+    # def test_int_appannie_all_downloads(self):
+    #     result = appannie.AppAnnie(self.apikey).all_downloads("2017-09-1")
+    #
+    #     print("Res type: {}".format(type(result)))
+    #     print("Res : {}".format(result))
+    #     # self.assertEquals(result["code"], 200)
+
+    @patch('apiutils.appannie.requests.get')
+    def test_appannie_accounts(self, mocked_get):
+        mocked_get.return_value.ok = True
+        mocked_get.return_value.status_code = "200"
+        mocked_get.return_value.text = self.accounts_json_resp
+
+        res = appannie.AppAnnie(self.apikey).accounts()
+        mocked_get.assert_called_with(self.account_url, headers=self.header)
+        self.assertEqual(res, json.loads(self.accounts_json_resp))
+
+    @patch('apiutils.appannie.requests.get')
+    def test_appannie_products(self, mocked_get):
+        mocked_get.return_value.ok = True
+        mocked_get.return_value.status_code = "200"
+        mocked_get.return_value.text = self.products_json_resp
+
+        res = appannie.AppAnnie(self.apikey).products("415343")
+        mocked_get.assert_called_with(self.product_url, headers=self.header)
+        self.assertEqual(res, json.loads(self.products_json_resp))
+
+    @patch('apiutils.appannie.requests.get')
+    def test_appannie_downloads(self, mocked_get):
+        mocked_get.return_value.ok = True
+        mocked_get.return_value.status_code = "200"
+        mocked_get.return_value.text = self.download_json_resp
+
+        res = appannie.AppAnnie(self.apikey).downloads_by_product("415343", "784797900", "2016-05-1")
+        mocked_get.assert_called_with(self.download_url, headers=self.header)
+        self.assertEqual(res, json.loads(self.download_json_resp))
 
     @patch('apiutils.appannie.requests.get')
     def test_appannie_all_downloads(self, mocked_get):
         mocked_get.return_value.ok = True
         mocked_get.return_value.status_code = "200"
-        mocked_get.return_value.json.return_value = json.dumps(self.accounts_json_resp)
+        mocked_get.return_value.text = self.accounts_json_resp
 
-        result = appannie.AppAnnie(self.apikey).all_downloads("2016-05-1")
+        res = appannie.AppAnnie(self.apikey).all_downloads("2016-05-1")
         mocked_get.assert_called_with(self.account_url, headers=self.header)
-
-        print("Res json: {}".format(result))
-        # self.assertEquals(result["code"], 200)
+        self.assertEqual(res, json.loads(self.accounts_json_resp))
 
 
-'''
-    @patch('apiutils.appannie.requests.get')
-    def test_appannie_downloads(self, mocked_get):
-        mocked_get.response.ok = True
-        mocked_get.response.status_code = "200"
-        mocked_get.response.json = self.download_json_resp
-
-        res = appannie.AppAnnie(self.apikey).downloads_by_product("415343", "784797900", "2016-05-1")
-        mocked_get.assert_called_with(self.download_url, headers=self.header)
-        self.assertTrue(res.ok)
-        # self.assertTrue(not res)
-
-    @patch('apiutils.appannie.requests.get')
-    def test_appannie_accounts(self, mocked_get):
-        mocked_get.response.ok = True
-        mocked_get.response.status_code = "200"
-        mocked_get.response.json = self.accounts_json_resp
-
-        res = appannie.AppAnnie(self.apikey).accounts()
-        mocked_get.assert_called_with(self.account_url, headers=self.header)
-        self.assertTrue(res.ok)
-
-    @patch('apiutils.appannie.requests.get')
-    def test_appannie_products(self, mocked_get):
-        mocked_get.response.ok = True
-        mocked_get.response.status_code = "200"
-        mocked_get.response.json = self.products_json_resp
-
-        res = appannie.AppAnnie(self.apikey).products("415343")
-        mocked_get.assert_called_with(self.product_url, headers=self.header)
-        self.assertTrue(res.ok)
-'''
+if __name__ == '__main__':
+    unittest.main()
