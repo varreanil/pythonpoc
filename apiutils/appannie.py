@@ -7,9 +7,9 @@ class AppAnnie:
     def __init__(self, apikey):
         self.header = {"authorization": "bearer {}".format(apikey)}
 
-    def _api_call(self, URL):
+    def _api_call(self, url):
         try:
-            response = requests.get(URL, headers=self.header)
+            response = requests.get(url, headers=self.header)
         except ConnectionError as CE:
             print("******** Unexpected error:", CE)
             raise
