@@ -1,23 +1,14 @@
 #!/usr/bin/env groovy
-pipeline {
-    agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-                sh 'python3 -m unittest tests.appannietests.TestAppAnnie'
-            }
-        }
-        stage('SonarQube') {
-            steps {
-                echo 'Analyzing code quality....'
-            }
-        }
+node {
+  stage('SCM') {
+    git 'file:///development/python/poc'
+  }
+  stage('SonarQube analysis') {
+    // requires SonarQube Scanner 2.8+
+    def scannerHome = tool 'sqscanner';
+    withSonarQubeEnv('SonarQube-local') {
+      sh "${scannerHome}/bin/sonar-scanner"
     }
+  }
 }
