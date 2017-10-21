@@ -4,6 +4,9 @@ node {
   stage('SCM') {
     git 'file:///development/python/poc'
   }
+  stage('Unit Test') {
+    sh 'python3 -m unittest tests.appannietests.TestAppAnnie'
+  }
   stage('SonarQube analysis') {
     echo "Anil::: $WORKSPACE"
     sh "ls $WORKSPACE/apiutils"
