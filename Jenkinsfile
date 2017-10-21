@@ -11,7 +11,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                python3 -m unittest tests.appannietests.TestAppAnnie
+                sh 'python3 -m unittest tests.appannietests.TestAppAnnie'
             }
         }
         stage('SonarQube') {
