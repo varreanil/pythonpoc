@@ -6,6 +6,7 @@ node {
   }
   stage('SonarQube analysis') {
     echo "Anil::: $WORKSPACE"
+    sh "ls $WORKSPACE/apiutils"
     // requires SonarQube Scanner 2.8+
     def scannerHome = tool 'sqscanner';
     withSonarQubeEnv('SonarQube-local') {
