@@ -7,6 +7,10 @@ node {
   stage('Unit Test') {
     sh 'python3 -m unittest tests.appannietests.TestAppAnnie'
   }
+  stage('Test Coverage') {
+    sh 'coverage run --source=. -m unittest discover -s tests'
+    sh 'coverage xml -i'
+  }
   stage('SonarQube analysis') {
     echo "Anil::: $WORKSPACE"
     sh "ls $WORKSPACE/apiutils"
