@@ -1,2 +1,4 @@
 .idea/
-datautils/__pycache__/
+*/__pycache__/
+.coverage
+coverage.xml
