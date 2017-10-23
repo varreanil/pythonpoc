@@ -5,7 +5,7 @@ node {
     git 'file:///development/python/poc'
   }
   stage('Unit Test') {
-    sh 'python3 -m unittest tests.appannietests.TestAppAnnie'
+    sh 'python3 -m unittest discover -s tests'
   }
   stage('Test Coverage') {
     sh 'coverage run --source=. -m unittest discover -s tests'
